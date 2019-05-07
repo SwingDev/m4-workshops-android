@@ -1,7 +1,11 @@
 package io.swingdev.microconf.workshop.domain.model
 
-// TODO: Annotate Entity class
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+
+@Entity(tableName = "tb_facts")
 data class CatFact(
-    val id: String,
+    @PrimaryKey @SerializedName("_id") val id: String,
     val text: String
 )
