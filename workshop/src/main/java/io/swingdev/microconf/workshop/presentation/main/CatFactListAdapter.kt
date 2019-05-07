@@ -30,15 +30,16 @@ class CatFactListAdapter : RecyclerView.Adapter<CatFactListAdapter.ItemViewHolde
     override fun getItemCount(): Int = _data.size
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind()
+        holder.bind(_data[position])
     }
 
     class ItemViewHolder(
         private val binding: ListItemCatFactBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind() {
-            // TODO: Bind list item
+        fun bind(item: CatFactItem) {
+            binding.item = item
+            binding.executePendingBindings()
         }
     }
 }

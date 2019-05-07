@@ -5,14 +5,14 @@
 
     <data>
 
-        <!-- TODO: Define variable -->
+        <variable
+            name="item"
+            type="io.swingdev.microconf.workshop.presentation.main.CatFactItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <!-- TODO: Provide text -->
 
         <TextView
             android:id="@+id/factText"
@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
+            android:text="@{ item.text }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Some very interesting fact about cat" />

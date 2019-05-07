@@ -3,18 +3,23 @@ package io.swingdev.microconf.workshop.presentation.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import dagger.android.AndroidInjection
 import io.swingdev.microconf.workshop.R
 import io.swingdev.microconf.workshop.databinding.ActivityCatFactsBinding
 import kotlinx.android.synthetic.main.activity_cat_facts.*
+import javax.inject.Inject
 
 class CatFactsActivity : AppCompatActivity() {
 
-    // TODO: Inject factory
+    @Inject
     lateinit var factory: ViewModelProvider.Factory
 
-    // TODO: Provide ViewModel instance using factory
-    private lateinit var viewModel: CatFactsViewModel
+    private val viewModel by lazy {
+        ViewModelProviders.of(this, factory)[CatFactsViewModel::class.java]
+    }
 
     private val adapter by lazy {
         CatFactListAdapter()
@@ -23,7 +28,7 @@ class CatFactsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO: Inject Activity
+        AndroidInjection.inject(this)
 
         DataBindingUtil.setContentView<ActivityCatFactsBinding>(
             this, R.layout.activity_cat_facts
@@ -32,9 +37,18 @@ class CatFactsActivity : AppCompatActivity() {
             it.adapter = adapter
         }
 
-        // TODO: Observe CatFacts list
+        viewModel.catFacts.observe(this, Observer {
+            if (it.isNotEmpty()) {
+                swipeLayout.isRefreshing = false
+                adapter.data = it
+            }
 
-        // TODO: Observe Error Handler
+        })
+
+        viewModel.errorHandler.observe(this, Observer {
+            swipeLayout.isRefreshing = false
+            it.printStackTrace()
+        })
 
         swipeLayout.setOnRefreshListener {
             onRefreshData()
