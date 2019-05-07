@@ -1,4 +1,4 @@
-package io.swingdev.microconf.advancedmvvm.utils
+package io.swingdev.microconf.workshop.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

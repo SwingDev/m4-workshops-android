@@ -1,1 +1,1 @@
-include ':mvvm', ':mvc', ':advancedmvvm'
+include ':mvvm', ':mvc', ':advancedmvvm', ':workshop'
