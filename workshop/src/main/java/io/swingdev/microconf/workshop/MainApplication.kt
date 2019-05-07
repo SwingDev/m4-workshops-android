@@ -6,6 +6,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import io.swingdev.microconf.workshop.di.AppInjector
+import io.swingdev.microconf.workshop.di.DaggerAppInjector
 import javax.inject.Inject
 
 open class MainApplication : Application(), HasActivityInjector {
@@ -13,13 +14,16 @@ open class MainApplication : Application(), HasActivityInjector {
     @Inject
     lateinit var injector: DispatchingAndroidInjector<Activity>
 
-    // TODO: Assign AppInjector after build
-    open lateinit var appInjector: AppInjector
+    open val appInjector: AppInjector by lazy {
+        DaggerAppInjector.builder()
+            .application(this)
+            .build()
+    }
 
     override fun onCreate() {
         super.onCreate()
 
-        // TODO: Inject MainApplication
+        appInjector.inject(this)
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = injector
