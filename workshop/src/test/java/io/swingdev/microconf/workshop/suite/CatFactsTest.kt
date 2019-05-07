@@ -5,12 +5,19 @@ import androidx.test.core.app.ActivityScenario
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.plugins.RxJavaPlugins
 import io.swingdev.microconf.workshop.R
+import io.swingdev.microconf.workshop.TestApplication
 import io.swingdev.microconf.workshop.presentation.main.CatFactListAdapter
 import io.swingdev.microconf.workshop.presentation.main.CatFactsActivity
+import io.swingdev.microconf.workshop.utils.TestObjects
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
-// TODO: Annotate test passing application class
+@RunWith(RobolectricTestRunner::class)
+@Config(application = TestApplication::class)
 class CatFactsTest {
     private lateinit var scenario: ActivityScenario<CatFactsActivity>
 
@@ -18,18 +25,23 @@ class CatFactsTest {
     fun setUp() {
         RxJavaPlugins.setIoSchedulerHandler { AndroidSchedulers.mainThread() }
 
-        // TODO: Launch CatFacts Activity
+        scenario = ActivityScenario.launch(CatFactsActivity::class.java)
     }
 
     @Test
     fun `Should load saved cat facts`() {
-        // TODO: Assert saved CatFact list is same as actual adapter's data
+        scenario.onActivity {
+            Assert.assertSame(TestObjects.savedFacts, it.getAdapter().data)
+        }
     }
 
     @Test
     fun `Should update new cat facts`() {
-        // TODO: Load data
-        // TODO: Assert updated CatFact list is same as actual adapter's data
+        scenario.onActivity {
+            it.onRefreshData()
+
+            Assert.assertSame(TestObjects.newFacts, it.getAdapter().data)
+        }
     }
 
     private fun CatFactsActivity.getAdapter(): CatFactListAdapter =
